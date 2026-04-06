@@ -16,10 +16,10 @@ interface TriageFormProps {
 }
 
 const triageStyles: Record<TriageColor, string> = {
-  red: 'bg-triage-red text-foreground ring-triage-red',
+  red: 'bg-triage-red text-white ring-triage-red',
   yellow: 'bg-triage-yellow text-background ring-triage-yellow',
-  green: 'bg-triage-green text-foreground ring-triage-green',
-  black: 'bg-triage-black text-foreground ring-muted-foreground border border-muted-foreground/30',
+  green: 'bg-triage-green text-white ring-triage-green',
+  black: 'bg-triage-black text-white border border-muted-foreground/30',
 };
 
 export function TriageForm({ patients, onSubmit }: TriageFormProps) {
@@ -187,8 +187,8 @@ export function TriageForm({ patients, onSubmit }: TriageFormProps) {
             <button
               key={c}
               onClick={() => { setChiefComplaint(c); setCustomComplaint(''); }}
-              className={`touch-target rounded-lg py-3 px-2 text-xs font-semibold text-center transition-colors ${
-                chiefComplaint === c ? 'bg-primary text-primary-foreground' : 'bg-surface border border-border text-muted-foreground'
+              className={`touch-target rounded-lg py-2 text-xs font-bold text-center ${
+                {red:'bg-triage-red text-white',yellow:'bg-triage-yellow text-background',green:'bg-triage-green text-white',black:'bg-triage-black text-white border border-muted-foreground/30'}[triage]
               }`}
             >
               {c}

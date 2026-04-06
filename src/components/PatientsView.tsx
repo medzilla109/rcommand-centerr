@@ -23,10 +23,10 @@ const statusLabels: Record<PatientStatus, { label: string; color: string }> = {
 
 const zoneFilterColors: Record<TriageColor | 'all', string> = {
   all: 'bg-primary text-primary-foreground',
-  red: 'bg-triage-red text-foreground',
+  red: 'bg-triage-red text-white',
   yellow: 'bg-triage-yellow text-background',
-  green: 'bg-triage-green text-foreground',
-  black: 'bg-triage-black text-foreground border border-muted-foreground/30',
+  green: 'bg-triage-green text-white',
+  black: 'bg-triage-black text-white border border-muted-foreground/30',
 };
 
 function ElapsedBadge({ since }: { since: number }) {
@@ -142,7 +142,7 @@ export function PatientsView({ patients, onUpdateStatus, onRetriage }: PatientsV
                             key={l.color}
                             onClick={() => { onRetriage(patient.id, l.color); setShowRetriage(null); setExpandedId(null); }}
                             className={`touch-target rounded-lg py-2 text-xs font-bold text-center ${
-                              {red:'bg-triage-red text-foreground',yellow:'bg-triage-yellow text-background',green:'bg-triage-green text-foreground',black:'bg-triage-black text-foreground border border-muted-foreground/30'}[l.color]
+                              {red:'bg-triage-red text-white',yellow:'bg-triage-yellow text-background',green:'bg-triage-green text-white',black:'bg-triage-black text-white border border-muted-foreground/30'}[l.color]
                             }`}
                           >
                             {l.icon} {l.label}
