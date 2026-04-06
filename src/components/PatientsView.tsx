@@ -103,7 +103,7 @@ export function PatientsView({ patients, onUpdateStatus, onRetriage }: PatientsV
                   <div className="flex items-center gap-2 mt-0.5 text-xs text-muted-foreground">
                     <span>{patient.gender === 'male' ? 'ชาย' : patient.gender === 'female' ? 'หญิง' : '?'}</span>
                     {patient.age && <span>· อายุ ~{patient.age} ปี</span>}
-                    <span>· {patient.chiefComplaint}</span>
+                    <span>· {Array.isArray(patient.chiefComplaint) ? patient.chiefComplaint.join(', ') : patient.chiefComplaint}</span>
                   </div>
                   <ElapsedBadge since={patient.createdAt} />
                 </div>

@@ -55,7 +55,7 @@ export interface Patient {
   gender: 'male' | 'female' | 'unknown';
   age: string;
   triageTag?: string;
-  chiefComplaint: string;
+  chiefComplaint: string[];
   status: PatientStatus;
   statusHistory: StatusHistoryEntry[];
   createdAt: number;

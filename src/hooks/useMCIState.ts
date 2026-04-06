@@ -53,7 +53,7 @@ export function useMCIState() {
     gender: 'male' | 'female' | 'unknown';
     age: string;
     triageTag?: string;
-    chiefComplaint: string;
+    chiefComplaint: string[];
   }) => {
     const num = nextPatientNum;
     setNextPatientNum(n => n + 1);
@@ -85,7 +85,7 @@ export function useMCIState() {
     setPatients(prev => [...prev, newPatient]);
     
     const colorIcon: Record<TriageColor, string> = { red: '🔴', yellow: '🟡', green: '🟢', black: '⚫' };
-    addTimelineEvent('triage', colorIcon[data.triage], `${patientId} ${patientName} → ${data.chiefComplaint}`);
+    addTimelineEvent('triage', colorIcon[data.triage], `${patientId} ${patientName} → ${data.chiefComplaint.join(', ')}`);
     
     return newPatient;
   }, [nextPatientNum, patients, addTimelineEvent]);

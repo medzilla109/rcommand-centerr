@@ -11,7 +11,7 @@ interface TriageFormProps {
     gender: 'male' | 'female' | 'unknown';
     age: string;
     triageTag?: string;
-    chiefComplaint: string;
+    chiefComplaint: string[];
   }) => void;
 }
 
@@ -29,7 +29,7 @@ export function TriageForm({ patients, onSubmit }: TriageFormProps) {
   const [gender, setGender] = useState<'male' | 'female' | 'unknown'>('unknown');
   const [age, setAge] = useState('');
   const [triageTag, setTriageTag] = useState('');
-  const [chiefComplaint, setChiefComplaint] = useState('');
+  const [chiefComplaints, setChiefComplaints] = useState<string[]>([]);
   const [customComplaint, setCustomComplaint] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
@@ -40,14 +40,14 @@ export function TriageForm({ patients, onSubmit }: TriageFormProps) {
     setGender('unknown');
     setAge('');
     setTriageTag('');
-    setChiefComplaint('');
+    setChiefComplaints([]);
     setCustomComplaint('');
     setSubmitted(false);
   };
 
   const handleSubmit = () => {
     if (!triage) return;
-    const complaint = chiefComplaint || customComplaint;
+    const complaint = chiefComplaints.length > 0 ? chiefComplaints.join(', ') : customComplaint;
     if (!complaint) return;
     
     onSubmit({
@@ -57,7 +57,7 @@ export function TriageForm({ patients, onSubmit }: TriageFormProps) {
       gender,
       age,
       triageTag: triageTag || undefined,
-      chiefComplaint: complaint,
+      chiefComplaint: chiefComplaints.length > 0 ? chiefComplaints : (customComplaint ? [customComplaint] : []),
     });
     setSubmitted(true);
   };
@@ -186,10 +186,19 @@ export function TriageForm({ patients, onSubmit }: TriageFormProps) {
           {CHIEF_COMPLAINTS.map(c => (
             <button
               key={c}
-              onClick={() => { setChiefComplaint(c); setCustomComplaint(''); }}
-              className={`touch-target rounded-lg py-2 text-xs font-bold text-center ${
-                {red:'bg-triage-red text-white',yellow:'bg-triage-yellow text-background',green:'bg-triage-green text-white',black:'bg-triage-black text-white border border-muted-foreground/30'}[triage]
-              }`}
+              onClick={() => {
+                  if (chiefComplaints.includes(c)) {
+                    setChiefComplaints(chiefComplaints.filter(item => item !== c));
+                  } else {
+                    setChiefComplaints([...chiefComplaints, c]);
+                  }
+                  setCustomComplaint('');
+                }}
+                className={`touch-target rounded-lg py-2 text-xs font-bold text-center transition-all ${
+                  chiefComplaints.includes(c) ? 'ring-2 ring-offset-2 ring-offset-background scale-[1.02]' : 'opacity-80'
+                } ${
+                  {red:'bg-triage-red text-white',yellow:'bg-triage-yellow text-background',green:'bg-triage-green text-white',black:'bg-triage-black text-white border border-muted-foreground/30'}[triage]
+                }`}
             >
               {c}
             </button>
@@ -198,7 +207,7 @@ export function TriageForm({ patients, onSubmit }: TriageFormProps) {
         <input
           type="text"
           value={customComplaint}
-          onChange={e => { setCustomComplaint(e.target.value); setChiefComplaint(''); }}
+          onChange={e => { setCustomComplaint(e.target.value); setChiefComplaints([]); }}
           placeholder="หรือพิมพ์เอง..."
           className="w-full touch-target bg-surface border border-border rounded-lg px-3 py-3 text-foreground placeholder:text-muted-foreground/50 text-base mt-2"
         />
@@ -207,9 +216,9 @@ export function TriageForm({ patients, onSubmit }: TriageFormProps) {
       {/* Submit */}
       <button
         onClick={handleSubmit}
-        disabled={!triage || (!chiefComplaint && !customComplaint)}
+        disabled={!triage || (chiefComplaints.length === 0 && !customComplaint)}
         className={`w-full rounded-lg py-4 text-lg font-bold transition-colors ${
-          triage && (chiefComplaint || customComplaint)
+          triage && (chiefComplaints.length > 0 || customComplaint)
             ? `${triageStyles[triage!]} active:brightness-110`
             : 'bg-surface-2 text-muted-foreground cursor-not-allowed'
         }`}
